@@ -32,4 +32,6 @@ plot(ray_z, [rays_in(1,:); rays_out(1,:)]);
 % Automating the generation of rays in a plane given a set of start points
 % and number of rays required per point. 
 
+%% Task 1.3 - Part 2
+% 
 
