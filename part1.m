@@ -33,5 +33,8 @@ plot(ray_z, [rays_in(1,:); rays_out(1,:)]);
 % and number of rays required per point. 
 
 %% Task 1.3 - Part 2
-% 
+% load the data matrix
+load('lightField.mat');
+
+[img, x, y] = rays2img(rays(1,:),rays(3,:),
 
