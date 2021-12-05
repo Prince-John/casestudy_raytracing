@@ -88,25 +88,9 @@ end
 
 
 %% Experimenting with a distance shift
-d1 = 100 ;
-rays_at_d1 = rays_propogate_d(rays, d);
-figure;
-colormap(gray)
-subplot(1,2,1);
-[img, x_edges, y_edges] =rays2img(rays(1,:), rays(3,:), 0.035, 480);
-image(x_edges([1 end]),y_edges([1 end]),img); 
-axis image xy;
-title('Rays at d = 0 m', 'Fontsize', 16)
-subplot(1,2,2);
-[img, x_edges, y_edges] =rays2img(rays_at_d1(1,:), rays_at_d1(3,:), 0.035, 480);
-image(x_edges([1 end]),y_edges([1 end]),img); 
-axis image xy;
-title("Rays at d = "+num2str(d1)+" m", 'Fontsize', 16)
+d1 = 0.1 ;
+rays_at_d1 = rays
 
-
-
-% No value will be able to create a shaprer image. Found no appretiable
-% increaces or even change in sharpness
 
 
 
