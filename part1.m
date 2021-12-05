@@ -52,7 +52,70 @@ colormap(gray)
 image(x_edges([1 end]),y_edges([1 end]),img); 
 axis image xy;
 
+%%
 % b) experimenting with different sensor widths
+
+sensor_sizes = linspace(0.005, 0.050, 9);
+pixels = 480;
+imgs = zeros(pixels, pixels, length(sensor_sizes));
+
+pltsize = ceil(sqrt(length(sensor_sizes)));
+figure;
+colormap(gray)
+for i = 1:length(sensor_sizes)
+    subplot(pltsize, pltsize, i)
+    imgs(:,:,i) = image(rays2img(rays(1,:), rays(3,:), sensor_sizes(i), 480));
+    axis image xy;
+    title("Sensor size = " + int2str(sensor_sizes(i)*1000)+ " mm", 'Fontsize', 14);
+end
+
+
+
+%% experimenting with pixel count
+
+pixel_count = linspace(50, 800, 9);
+sensor_size = 0.026; % approximate size of a crop format sensor, most common consumer dslr config. 
+
+pltsize = ceil(sqrt(length(pixel_count)));
+figure;
+colormap(gray)
+for i = 1:length(pixel_count)
+    subplot(pltsize, pltsize, i)
+    image(rays2img(rays(1,:), rays(3,:), sensor_size, pixel_count(i)));
+    axis image xy;
+    title("Pixel\_count = " + int2str(pixel_count(i)), 'Fontsize', 14);
+end
+
+
+%% Experimenting with a distance shift
+d1 = 100 ;
+rays_at_d1 = rays_propogate_d(rays, d);
+figure;
+colormap(gray)
+subplot(1,2,1);
+[img, x_edges, y_edges] =rays2img(rays(1,:), rays(3,:), 0.035, 480);
+image(x_edges([1 end]),y_edges([1 end]),img); 
+axis image xy;
+title('Rays at d = 0 m', 'Fontsize', 16)
+subplot(1,2,2);
+[img, x_edges, y_edges] =rays2img(rays_at_d1(1,:), rays_at_d1(3,:), 0.035, 480);
+image(x_edges([1 end]),y_edges([1 end]),img); 
+axis image xy;
+title("Rays at d = "+num2str(d1)+" m", 'Fontsize', 16)
+
+
+
+% No value will be able to create a shaprer image. Found no appretiable
+% increaces or even change in sharpness
+
+
+
+
+
+
+
+
+
 
 
 
