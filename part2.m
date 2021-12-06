@@ -90,7 +90,6 @@ rays_in = rays_after_d1;
 rays_out= rays_at_d2;
 ray_z2 = [d1*ones(1,size(rays_in,2)); (d1+d2_values(i))*ones(1,size(rays_in,2))];
 plot(ray_z2, [rays_in(1,:); rays_out(1,:)]);
-ylim([-0.01, 0.1])
 xlabel('z (m)');
 ylabel('x (m)');
 title("F = "+num2str(f_values(i)), 'Fontsize', 16);
