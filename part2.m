@@ -136,7 +136,7 @@ rays_at_d0 = load('lightField.mat').rays;
 Mf = [1 0 0 0;-1/f 1 0 0;0 0 1 0;0 0 -1/f 1];
 rays_at_d1 = Mf*rays_at_d0;
 rays_at_d2 = rays_propogate_d(rays_at_d1, d2);
-[img, x_edges, y_edges] = rays2img(rays_at_d2(1,:),rays_at_d2(3,:),0.005, 720);
+[img, x_edges, y_edges] = rays2img(rays_at_d2(1,:),rays_at_d2(3,:),0.005, 200);
 figure;
 colormap(gray)
 image(x_edges([1 end]),y_edges([1 end]),img); 
@@ -165,47 +165,36 @@ for i = 1:length(f_values)
 end
 
 
-
-
-
-
-
-
-
-
 %% Design a system
-d1 = 0.5;
-[f_experiment, d2_experiment, result_experiment] = optical_system(d1);
+f_values = linspace(0.01, 0.1, 100);
+contrast = zeros(length(f_values),1);
 
-function [f_values, d2_values, result] = optical_system(d1)
-    rays_at_d0 = load('lightField.mat').rays;
+pixels = 480;
 
-    % From the handout the ratio of d1, d2, and f must be according to this
-    % equation $\frac{1}{d_1} + \frac{1}{d_2} = \frac{1}{f}$. So, 1/f - 1/d1 =
-    % 1/d2; d2 = (d1xf)/(d1 - f)
+kernel = [-1, -1, -1, -1, 8, -1, -1, -1]/8;
 
-    % choosing d1 same as part one = 0.05
-    f_values = linspace(0.3, 0.6, 6);
-    d2_values = ((d1*f_values)./(d1-f_values))*1.1;
-    orignal_img = rays2img(rays_at_d0(1,:),rays_at_d0(3,:),0.02,480);
-    result = [orignal_img];
-    for i =1:length(f_values)
-        Mf = [1 0 0 0;-1/f_values(i) 1 0 0;0 0 1 0;0 0 -1/f_values(i) 1];
-%         rays_at_d1 = rays_propogate_d(rays_at_d0, d1);
-%         rays_after_d1 = Mf*rays_at_d1;
-        rays_after_d0 = Mf*rays_at_d0;
-        rays_at_d2 = rays_propogate_d(rays_after_d0, d2_values(i));
-        [img, x_edges, y_edges] = rays2img(rays_at_d2(1,:),rays_at_d2(3,:),0.08, 480);
-        figure;
-        colormap(gray)
-        image(x_edges([1 end]),y_edges([1 end]),img); 
-        axis image xy;
 
-        niqeI = brisque(rays_at_d2);
-        fprintf('NIQE score for original image is %0.4f.\n',niqeI)
-
-    end
-
+for i = 1:length(f_values)
+    f = f_values(i);
+    Mf = [1 0 0 0;-1/f 1 0 0;0 0 1 0;0 0 -1/f 1];
+    rays_at_d1 = Mf*rays_at_d0;
+    rays_at_d2 = rays_propogate_d(rays_at_d1, d2);
+    
+    [img, x_edges, y_edges] = rays2img(rays_at_d2(1,:),rays_at_d2(3,:),0.005, 100);
+    diffImage = conv2(double(img), kernel, 'same');
+    contrast(i) = mean2(diffImage);
+    
+    
 end
+%% 
+[img, maxf] = optical_system(rays_at_d0);
+figure;
+colormap(gray)
+image(x_edges([1 end]),y_edges([1 end]),img); 
+axis image xy;
+title("f value= " + num2str(maxf*1000)+ " mm", 'Fontsize', 14);
+
+
+
 
 
