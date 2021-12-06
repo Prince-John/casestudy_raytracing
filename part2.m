@@ -121,7 +121,6 @@ xlabel('Focus (m)', 'Fontsize', 16);
 ylabel('Magnification', 'Fontsize', 16);
 
 
-
 % c) the equation would not hold up 
 
 %% Using a combined matrix.
@@ -144,6 +143,71 @@ sample_x_in = [0.1; -0.1571; 0; 0];
 s_out = combined_propogation(0.2,0.5,0.1,sample_x_in);
 
 
+%% 
+% lets fix d2 at 15 cm. 
+d2 = 0.15;
+f = 0.0857;
+rays_at_d0 = load('lightField.mat').rays;
+Mf = [1 0 0 0;-1/f 1 0 0;0 0 1 0;0 0 -1/f 1];
+rays_at_d1 = Mf*rays_at_d0;
+rays_at_d2 = rays_propogate_d(rays_at_d1, d2);
+[img, x_edges, y_edges] = rays2img(rays_at_d2(1,:),rays_at_d2(3,:),0.005, 200);
+figure;
+colormap(gray)
+image(x_edges([1 end]),y_edges([1 end]),img); 
+axis image xy;
+
+
+
+%%
+f_values = linspace(0.085, 0.088, 9);
+pixels = 480;
+imgs = zeros(pixels, pixels, length(f_values));
+
+pltsize = ceil(sqrt(length(f_values)));
+figure;
+colormap(gray)
+for i = 1:length(f_values)
+    f = f_values(i);
+    Mf = [1 0 0 0;-1/f 1 0 0;0 0 1 0;0 0 -1/f 1];
+    rays_at_d1 = Mf*rays_at_d0;
+    rays_at_d2 = rays_propogate_d(rays_at_d1, d2);
+    subplot(pltsize, pltsize, i)
+    [img, x_edges, y_edges] = rays2img(rays_at_d2(1,:),rays_at_d2(3,:),0.010, 480);
+    image(x_edges([1 end]),y_edges([1 end]),img); 
+    axis image xy;
+    title("f value= " + num2str(f_values(i)*1000)+ " mm", 'Fontsize', 14);
+end
+
+
+%% Design a system
+f_values = linspace(0.01, 0.1, 100);
+contrast = zeros(length(f_values),1);
+
+pixels = 480;
+
+kernel = [-1, -1, -1, -1, 8, -1, -1, -1]/8;
+
+
+for i = 1:length(f_values)
+    f = f_values(i);
+    Mf = [1 0 0 0;-1/f 1 0 0;0 0 1 0;0 0 -1/f 1];
+    rays_at_d1 = Mf*rays_at_d0;
+    rays_at_d2 = rays_propogate_d(rays_at_d1, d2);
+    
+    [img, x_edges, y_edges] = rays2img(rays_at_d2(1,:),rays_at_d2(3,:),0.005, 100);
+    diffImage = conv2(double(img), kernel, 'same');
+    contrast(i) = mean2(diffImage);
+    
+    
+end
+%% 
+[img, maxf] = optical_system(rays_at_d0);
+figure;
+colormap(gray)
+image(x_edges([1 end]),y_edges([1 end]),img); 
+axis image xy;
+title("f value= " + num2str(maxf*1000)+ " mm", 'Fontsize', 14);
 
 
 
