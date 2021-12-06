@@ -73,7 +73,7 @@ end
 
 %% experimenting with pixel count
 
-pixel_count = linspace(50, 800, 3);
+pixel_count = linspace(50, 2800, 3);
 sensor_size = 0.026; % approximate size of a crop format sensor, most common consumer dslr config. 
 
 pltsize = ceil(sqrt(length(pixel_count)));

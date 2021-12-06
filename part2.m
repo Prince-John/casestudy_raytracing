@@ -127,13 +127,21 @@ ylabel('Magnification', 'Fontsize', 16);
 %% Using a combined matrix.
 
 % the combined matrix is defined in the method |combined_propogation(d1, d2, f, rays)|
+% Lets test out the relationships between sample rays, 
+% Ray (x1, \theta1)
+
+sample_x_input = generate_1d_rays('x', 0.0, 0.1, 2);
+sample_x_output = combined_propogation(0.2,0.3,0.1, sample_x_input); 
+testa = rays_propogate_d(sample_x_input, 0.2);
+testb = rays_through_lens(testa, 0.1);
+testc = rays_propogate_d(testb, 0.8);
 
 
+% Any ray that started at x = 0 stays at x =  0.
 
 
-
-
-
+sample_x_in = [0.1; -0.1571; 0; 0];
+s_out = combined_propogation(0.2,0.5,0.1,sample_x_in);
 
 
 

@@ -126,7 +126,12 @@ ylabel('Magnification', 'Fontsize', 16);
 
 %% Using a combined matrix.
 
-% the combined matrix is defined in the method 
+% the combined matrix is defined in the method |combined_propogation(d1, d2, f, rays)|
+% Lets test out the relationships between sample rays, 
+% Ray (x1, \theta1)
+
+sample_x_input = generate_1d_rays('x', 0.0, 0.1, 2);
+sample_x_output =  
 
 
 
