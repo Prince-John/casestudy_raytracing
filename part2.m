@@ -129,6 +129,56 @@ ylabel('Magnification', 'Fontsize', 16);
 
 % c) the equation would not hold up 
 
+
+
+
+
+
+%% 
+% lets fix d2 at 15 cm. 
+d2 = 0.15;
+f = 0.0857;
+rays_at_d0 = load('lightField.mat').rays;
+Mf = [1 0 0 0;-1/f 1 0 0;0 0 1 0;0 0 -1/f 1];
+rays_at_d1 = Mf*rays_at_d0;
+rays_at_d2 = rays_propogate_d(rays_at_d1, d2);
+[img, x_edges, y_edges] = rays2img(rays_at_d2(1,:),rays_at_d2(3,:),0.005, 720);
+figure;
+colormap(gray)
+image(x_edges([1 end]),y_edges([1 end]),img); 
+axis image xy;
+
+
+
+%%
+f_values = linspace(0.085, 0.088, 9);
+pixels = 480;
+imgs = zeros(pixels, pixels, length(f_values));
+
+pltsize = ceil(sqrt(length(f_values)));
+figure;
+colormap(gray)
+for i = 1:length(f_values)
+    f = f_values(i);
+    Mf = [1 0 0 0;-1/f 1 0 0;0 0 1 0;0 0 -1/f 1];
+    rays_at_d1 = Mf*rays_at_d0;
+    rays_at_d2 = rays_propogate_d(rays_at_d1, d2);
+    subplot(pltsize, pltsize, i)
+    [img, x_edges, y_edges] = rays2img(rays_at_d2(1,:),rays_at_d2(3,:),0.010, 480);
+    image(x_edges([1 end]),y_edges([1 end]),img); 
+    axis image xy;
+    title("f value= " + num2str(f_values(i)*1000)+ " mm", 'Fontsize', 14);
+end
+
+
+
+
+
+
+
+
+
+
 %% Design a system
 d1 = 0.5;
 [f_experiment, d2_experiment, result_experiment] = optical_system(d1);
@@ -156,9 +206,12 @@ function [f_values, d2_values, result] = optical_system(d1)
         colormap(gray)
         image(x_edges([1 end]),y_edges([1 end]),img); 
         axis image xy;
-        result = [result img];
-        niqeI = brisque(img);
-        title("NIQE score for original image is " + num2str(niqeI));
+
+        niqeI = brisque(rays_at_d2);
+        fprintf('NIQE score for original image is %0.4f.\n',niqeI)
+
     end
 
 end
+
+
