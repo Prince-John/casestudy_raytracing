@@ -123,3 +123,20 @@ ylabel('Magnification', 'Fontsize', 16);
 
 
 % c) the equation would not hold up 
+
+%% Using a combined matrix.
+
+% the combined matrix is defined in the method |combined_propogation(d1, d2, f, rays)|
+
+
+
+
+
+
+
+
+
+
+
+
+
