@@ -27,7 +27,8 @@ rays_out = Md*rays_in;
 % rays_in is a 4 x N matrix representing the rays emitted from an object
 % rays_out is a 4 x N matrix representing the rays after propagating distance d
 ray_z = [zeros(1,size(rays_in,2)); d*ones(1,size(rays_in,2))];
-plot(ray_z, [rays_in(1,:); rays_out(1,:)]);
+figure();
+plot(ray_z, [rays_in(1,:); rays_out(1,:)],'Color', 'b');
 
 % Automating the generation of rays in a plane given a set of start points
 % and number of rays required per point. 
@@ -35,7 +36,11 @@ plot(ray_z, [rays_in(1,:); rays_out(1,:)]);
 rays_in = generate_1d_rays('x', 0.00, 0.01, 5);
 rays_out = Md*rays_in;
 ray_z = [zeros(1,size(rays_in,2)); d*ones(1,size(rays_in,2))];
-plot(ray_z, [rays_in(1,:); rays_out(1,:)]);
+figure();
+plot(ray_z(:,(1:5)), [rays_in(1,(1:5)); rays_out(1,(1:5))],'Color','r');
+hold on
+plot(ray_z(:,(6:10)), [rays_in(1,(6:10)); rays_out(1,(6:10))],'Color','b');
+hold off
 ylim([-0.03, 0.03])
 xlabel('z (m)');
 ylabel('x (m)');
