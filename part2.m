@@ -125,9 +125,9 @@ ylabel('Magnification', 'Fontsize', 16);
 
 %% Design a system
 d1 = 0.5;
-[f_experiment, d2_experiment] = optical_system(d1);
+[f_experiment, d2_experiment, result_experiment] = optical_system(d1);
 
-function [f_values, d2_values] = optical_system(d1)
+function [f_values, d2_values, result] = optical_system(d1)
     rays_at_d0 = load('lightField.mat').rays;
 
     % From the handout the ratio of d1, d2, and f must be according to this
@@ -137,18 +137,22 @@ function [f_values, d2_values] = optical_system(d1)
     % choosing d1 same as part one = 0.05
     f_values = linspace(0.3, 0.6, 6);
     d2_values = ((d1*f_values)./(d1-f_values))*1.1;
+    orignal_img = rays2img(rays_at_d0(1,:),rays_at_d0(3,:),0.02,480);
+    result = [orignal_img];
     for i =1:length(f_values)
         Mf = [1 0 0 0;-1/f_values(i) 1 0 0;0 0 1 0;0 0 -1/f_values(i) 1];
-        rays_at_d1 = rays_propogate_d(rays_at_d0, d1);
-        rays_after_d1 = Mf*rays_at_d1;
-        rays_at_d2 = rays_propogate_d(rays_after_d1, d2_values(i));
-        [img, x_edges, y_edges] = rays2img(rays_at_d2(1,:),rays_at_d2(3,:),0.035, 480);
+%         rays_at_d1 = rays_propogate_d(rays_at_d0, d1);
+%         rays_after_d1 = Mf*rays_at_d1;
+        rays_after_d0 = Mf*rays_at_d0;
+        rays_at_d2 = rays_propogate_d(rays_after_d0, d2_values(i));
+        [img, x_edges, y_edges] = rays2img(rays_at_d2(1,:),rays_at_d2(3,:),0.08, 480);
         figure;
         colormap(gray)
         image(x_edges([1 end]),y_edges([1 end]),img); 
         axis image xy;
-        niqeI = brisque(rays_at_d2,rays_at_d0);
-        fprintf('NIQE score for original image is %0.4f.\n',niqeI)
+        result = [result img];
+        niqeI = brisque(img);
+        title("NIQE score for original image is " + num2str(niqeI));
     end
 
 end
