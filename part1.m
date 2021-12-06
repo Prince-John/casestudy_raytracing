@@ -60,7 +60,7 @@ axis image xy;
 %%
 % b) experimenting with different sensor widths
 
-sensor_sizes = linspace(0.005, 0.050, 9);
+sensor_sizes = linspace(0.005, 0.050, 4);
 pixels = 480;
 imgs = zeros(pixels, pixels, length(sensor_sizes));
 
@@ -78,7 +78,7 @@ end
 
 %% experimenting with pixel count
 
-pixel_count = linspace(50, 2800, 3);
+pixel_count = linspace(50, 800, 4);
 sensor_size = 0.026; % approximate size of a crop format sensor, most common consumer dslr config. 
 
 pltsize = ceil(sqrt(length(pixel_count)));

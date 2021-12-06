@@ -30,11 +30,13 @@ rays_in = rays_at_d0;
 rays_out= rays_at_d1;
 hold on;
 ray_z1 = [zeros(1,size(rays_in,2)); d1*ones(1,size(rays_in,2))];
-plot(ray_z1, [rays_in(1,:); rays_out(1,:)]);
+plot(ray_z1(:,1:5), [rays_in(1,1:5); rays_out(1,1:5)],'Color', 'r');
+plot(ray_z1(:,6:10), [rays_in(1,6:10); rays_out(1,6:10)],'Color', 'b');
 rays_in = rays_after_d1;
 rays_out= rays_at_d2;
 ray_z2 = [d1*ones(1,size(rays_in,2)); (d1+d2)*ones(1,size(rays_in,2))];
-plot(ray_z2, [rays_in(1,:); rays_out(1,:)]);
+plot(ray_z2(:,1:5), [rays_in(1,1:5); rays_out(1,1:5)],'Color', 'r');
+plot(ray_z2(:,6:10), [rays_in(1,6:10); rays_out(1,6:10)],'Color', 'b');
 hold off;
 ylim([-0.05, 0.1])
 xlabel('z (m)');
@@ -52,13 +54,17 @@ rays_at_d2 = rays_propogate_d(rays_after_d1, d2);
 figure()
 rays_in = rays_at_d0;
 rays_out= rays_at_d1;
-hold on;
 ray_z1 = [zeros(1,size(rays_in,2)); d1*ones(1,size(rays_in,2))];
-plot(ray_z1, [rays_in(1,:); rays_out(1,:)]);
+plot(ray_z1(:,1:5), [rays_in(1,1:5); rays_out(1,1:5)], 'Color', 'r');
+hold on;
+plot(ray_z1(:,6:10), [rays_in(1,6:10); rays_out(1,6:10)], 'Color', 'b');
+plot(ray_z1(:,11:15), [rays_in(1,11:15); rays_out(1,11:15)], 'Color', 'g');
 rays_in = rays_after_d1;
 rays_out= rays_at_d2;
 ray_z2 = [d1*ones(1,size(rays_in,2)); (d1+d2)*ones(1,size(rays_in,2))];
-plot(ray_z2, [rays_in(1,:); rays_out(1,:)]);
+plot(ray_z2(:,1:5), [rays_in(1,1:5); rays_out(1,1:5)],'Color','r');
+plot(ray_z2(:,6:10), [rays_in(1,6:10); rays_out(1,6:10)],'Color','b');
+plot(ray_z2(:,11:15), [rays_in(1,11:15); rays_out(1,11:15)],'Color','g');
 hold off;
 ylim([-0.05, 0.1])
 xlabel('z (m)');
